@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Memory Game | Javascript</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Memory Game</h2>
+        <button class="reset" onclick="window.location.reload();">Reset Game</button>
+        <div class="game"></div>
+        <script>
+            const pairs = [
+                ["Hi", "Hello"],
+                ["Goodbye", "Bye"],
+                ["See you soon", "See you around"],
+                ["Good Morning", "Good afternoon"],
+                ["What is your name?", "How can I call you?"],
+                ["I am Harry, Harry Potter", "Call me Harry, Harry Potter"],
+                ["How are you?", "How is it going?"],
+                ["I am fine, thanks", "I am wonderful"]
+            ];
+            
+            const words = pairs.flat();
+            var shuf_words = words.sort(() => Math.random() - 0.5);
+
+            for (var i = 0; i < shuf_words.length; i++) {
+                let box = document.createElement('div');
+                box.className = "item";
+                box.innerHTML = shuf_words[i];
+                document.querySelector('.game').appendChild(box);
+
+                box.onclick = function() {
+                    this.classList.add('boxOpen');
+                    setTimeout(function() {
+                        let openBoxes = document.querySelectorAll('.boxOpen');
+                        if (openBoxes.length > 1) {
+                            let firstPhrase = openBoxes[0].innerHTML;
+                            let secondPhrase = openBoxes[1].innerHTML;
+                            let isMatch = pairs.some(pair => pair.includes(firstPhrase) && pair.includes(secondPhrase));
+                            
+                            if (isMatch) {
+                                openBoxes[0].classList.add('boxMatch');
+                                openBoxes[1].classList.add('boxMatch');
+                                openBoxes[0].classList.remove('boxOpen');
+                                openBoxes[1].classList.remove('boxOpen');
+
+                                if (document.querySelectorAll('.boxMatch').length == words.length) {
+                                    alert('You won');
+                                }
+                            } else {
+                                openBoxes[0].classList.remove('boxOpen');
+                                openBoxes[1].classList.remove('boxOpen');
+                            }
+                        }
+                    }, 500);
+                };
+            }
+        </script>
+    </div>
+</body>
+</html>
